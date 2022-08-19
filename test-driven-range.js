@@ -26,26 +26,40 @@ function formRange(data) {
   let endsAt;
   let occurence = 1;
   let ranges = [];
-  sortedInput.forEach((element, index) => {
-    const difference = sortedInput[index + 1] - sortedInput[index];
-    if ([0, 1].includes(difference)) {
-      endsAt = index + 1;
-      occurence++;
-    } else {
-      if (occurence > 1) {
-        ranges.push({
-          min: sortedInput[startAt],
-          max: sortedInput[endsAt],
-          occurence,
-        });
-        endsAt = undefined;
-        occurence = 1;
-      }
-      startAt = index + 1;
-    }
-  });
 
-  printRange(ranges);
+  if (sortedInput.length > 1) {
+    sortedInput.forEach((element, index) => {
+      const difference = getDifference(
+        sortedInput[index + 1],
+        sortedInput[index]
+      );
+      if ([0, 1].includes(difference)) {
+        endsAt = index + 1;
+        occurence++;
+      } else {
+        if (occurence > 1) {
+          ranges.push({
+            min: sortedInput[startAt],
+            max: sortedInput[endsAt],
+            occurence,
+          });
+          endsAt = undefined;
+          occurence = 1;
+        }
+        startAt = index + 1;
+      }
+    });
+  } else {
+    ranges = [
+      {
+        min: data[0],
+        max: data[0],
+        occurence: 1,
+      },
+    ];
+  }
+
+  return ranges;
 }
 
 function printRange(ranges) {
@@ -55,10 +69,17 @@ function printRange(ranges) {
   });
 }
 
-formRange([3, 3, 4, 5, 7, 8, 9]);
+function getDifference(number1, number2) {
+  if (number1 !== undefined || number2 != undefined) {
+    return number1 - number2;
+  }
+}
+
+printRange(formRange([3]));
 
 module.exports = {
   isNotEmpty,
   isArray,
   formRange,
+  getDifference,
 };
