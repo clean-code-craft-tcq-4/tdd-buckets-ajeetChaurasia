@@ -13,12 +13,8 @@ function isArray(data) {
 }
 
 function formRange(data) {
-  if (!isNotEmpty(data)) {
-    return 'Input is empty';
-  }
-
-  if (!isArray(data)) {
-    return 'Non Array Data';
+  if (!isNotEmpty(data) || !isArray(data)) {
+    return 'Wrong Input';
   }
 
   let sortedInput = Object.keys(data);
@@ -27,37 +23,27 @@ function formRange(data) {
   let occurence = 1;
   let ranges = [];
 
-  if (sortedInput.length > 1) {
-    sortedInput.forEach((element, index) => {
-      const difference = getDifference(
-        sortedInput[index + 1],
-        sortedInput[index]
-      );
-      if ([0, 1].includes(difference)) {
-        endsAt = index + 1;
-        occurence++;
-      } else {
-        if (occurence > 1) {
-          ranges.push({
-            min: sortedInput[startAt],
-            max: sortedInput[endsAt],
-            occurence,
-          });
-          endsAt = undefined;
-          occurence = 1;
-        }
-        startAt = index + 1;
+  sortedInput.forEach((element, index) => {
+    const difference = getDifference(
+      sortedInput[index + 1],
+      sortedInput[index]
+    );
+    if ([0, 1].includes(difference)) {
+      endsAt = index + 1;
+      occurence++;
+    } else {
+      if (occurence > 1) {
+        ranges.push({
+          min: sortedInput[startAt],
+          max: sortedInput[endsAt],
+          occurence,
+        });
+        endsAt = undefined;
+        occurence = 1;
       }
-    });
-  } else {
-    ranges = [
-      {
-        min: data[0],
-        max: data[0],
-        occurence: 1,
-      },
-    ];
-  }
+      startAt = index + 1;
+    }
+  });
 
   return ranges;
 }
@@ -65,7 +51,7 @@ function formRange(data) {
 function printRange(ranges) {
   console.log('Range', 'Occurence');
   ranges.forEach(function (obj, index) {
-    console.log(obj['min'] + '-' + obj['max'], obj['occurence']);
+    console.log(obj.min + '-' + obj.max, obj.occurence);
   });
 }
 

@@ -32,13 +32,13 @@ describe('charge range with test driven development', () => {
   it('should check for the empty value', () => {
     let input = 'non array data';
     let actual = charge.formRange(input);
-    expect(actual).equal('Non Array Data');
+    expect(actual).equal('Wrong Input');
   });
 
   it('should check for the empty value', () => {
     let input1 = [];
     let actual1 = charge.formRange(input1);
-    expect(actual1).equals('Input is empty');
+    expect(actual1).equals('Wrong Input');
   });
 
   it('formRange() should check for the one value', () => {
